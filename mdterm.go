@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -12,8 +13,9 @@ import (
 )
 
 type CLIRenrerer struct {
-	HPos    [6]int
-	Context bf.NodeType
+	HPos       [6]int
+	Context    bf.NodeType
+	ListIndent int
 }
 
 func (c *CLIRenrerer) Init() {
@@ -38,12 +40,35 @@ func (c *CLIRenrerer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 	switch node.Type {
 	case bf.Document:
 	case bf.BlockQuote:
+		if entering {
+			c.Context = bf.BlockQuote
+		} else {
+			c.Context = 0
+		}
+
 	case bf.List:
+		if entering {
+			c.ListIndent++
+		} else {
+			c.ListIndent--
+			if c.ListIndent == 0 {
+				w.Write([]byte("\n"))
+			}
+		}
+
 	case bf.Item:
+		if entering {
+			w.Write([]byte(strings.Repeat("  ", c.ListIndent-1) + "* "))
+		}
 
 	case bf.Paragraph:
 		if !entering {
-			w.Write([]byte("\n\n"))
+			if c.ListIndent > 0 {
+				w.Write([]byte("\n"))
+			} else {
+				w.Write([]byte("\n\n"))
+			}
+
 		}
 
 	case bf.Heading:
@@ -103,9 +128,23 @@ func (c *CLIRenrerer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 	case bf.Text:
 		if entering && len(node.Literal) != 0 {
 			switch c.Context {
-			case bf.Code:
-				w.Write([]byte("│ "))
-				w.Write(node.Literal)
+			case bf.BlockQuote:
+				lines := strings.Split(strings.Trim(string(node.Literal), "\n"), "\n")
+				mark := ansi.ColorCode("cyan+b") + "┃" + ansi.ColorCode("reset")
+				markReg, _ := regexp.Compile(">\\s*")
+				lineReg, _ := regexp.Compile("^((>\\s*)*)([^>\\s].*)$")
+				for _, line := range lines {
+					w.Write([]byte(mark))
+					group := lineReg.FindStringSubmatch(line)
+					if len(group) > 3 {
+						w.Write([]byte(markReg.ReplaceAllString(group[1], mark)))
+						w.Write([]byte(" "))
+						w.Write([]byte(ansi.ColorCode("reset")))
+						w.Write([]byte(group[3]))
+					}
+					w.Write([]byte("\n"))
+				}
+				w.Write([]byte(ansi.ColorCode("reset")))
 			default:
 				w.Write(node.Literal)
 			}
@@ -128,14 +167,7 @@ func (c *CLIRenrerer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 	case bf.Softbreak:
 	case bf.Hardbreak:
 	case bf.Code:
-		if len(node.Literal) == 0 {
-			if entering {
-				c.Context = bf.Code
-				w.Write([]byte(ansi.ColorCode("cyan+b")))
-			} else {
-				c.Context = 0
-			}
-		} else {
+		if entering {
 			w.Write([]byte(ansi.ColorCode("cyan+b")))
 			w.Write(node.Literal)
 			w.Write([]byte(ansi.Reset))
