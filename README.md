@@ -1,5 +1,7 @@
 # mdterm
 
+Output markdown to terminal
+
 ## Usage
 
 ```go
@@ -42,3 +44,7 @@ fmt.Println(string(output))
     * [ ] with align
     * [ ] with inline styling
     * [ ] without outer pipe
+
+## Screenshot
+
+<img src="sample.png" width="300">
