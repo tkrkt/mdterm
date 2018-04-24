@@ -66,6 +66,9 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 			c.context = bf.BlockQuote
 		} else {
 			c.context = 0
+			if node.Next != nil {
+				w.Write([]byte("\n\n"))
+			}
 		}
 
 	case bf.List:
@@ -74,7 +77,7 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 			c.listNum[c.listIndent-1] = 0
 		} else {
 			c.listIndent--
-			if c.listIndent == 0 {
+			if c.listIndent == 0 && node.Next != nil {
 				w.Write([]byte("\n"))
 			}
 		}
@@ -98,7 +101,7 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 		if !entering {
 			if c.listIndent > 0 {
 				w.Write([]byte("\n"))
-			} else {
+			} else if node.Next != nil {
 				w.Write([]byte("\n\n"))
 			}
 		}
@@ -117,12 +120,15 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 				w.Write([]byte(strings.Repeat("#", node.Level) + " "))
 			}
 		} else {
+			w.Write([]byte("\n"))
 			if node.Level <= c.headingUnderlineLevel {
-				w.Write([]byte("\n" + strings.Repeat("─", 50)))
+				w.Write([]byte(strings.Repeat("─", 50) + "\n"))
+			}
+			if node.Next != nil {
+				w.Write([]byte("\n"))
 			}
 			c.context = 0
 			w.Write(c.theme.Normal)
-			w.Write([]byte("\n\n"))
 		}
 
 	case bf.HorizontalRule:
@@ -130,7 +136,10 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 			w.Write(c.theme.BoldColor)
 			w.Write([]byte(strings.Repeat("─", 50)))
 			w.Write(c.theme.Normal)
-			w.Write([]byte("\n\n"))
+			w.Write([]byte("\n"))
+			if node.Next != nil {
+				w.Write([]byte("\n"))
+			}
 		}
 
 	case bf.Emph:
@@ -249,15 +258,21 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 				w.Write([]byte(line))
 				w.Write([]byte("\n"))
 			}
-			w.Write([]byte("\n"))
+			if node.Next != nil {
+				w.Write([]byte("\n"))
+			}
 			w.Write(c.theme.Normal)
 		}
 
 	case bf.Softbreak:
-		w.Write([]byte("\n"))
+		if node.Next != nil {
+			w.Write([]byte("\n"))
+		}
 
 	case bf.Hardbreak:
-		w.Write([]byte("\n"))
+		if node.Next != nil {
+			w.Write([]byte("\n"))
+		}
 
 	case bf.Code:
 		if entering {
@@ -283,9 +298,12 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 			tw.SetColumnSeparator("│")
 
 			tw.Render()
-			w.Write([]byte("\n"))
+			if node.Next != nil {
+				w.Write([]byte("\n"))
+			}
 			c.context = 0
 		}
+
 	case bf.TableCell:
 	case bf.TableHead:
 	case bf.TableBody:
