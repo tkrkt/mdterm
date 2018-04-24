@@ -5,11 +5,11 @@ import (
 )
 
 // Option customizes the Markdown processor's default behavior.
-type Option func(*CLIRenrerer)
+type Option func(*CLIRenderer)
 
 // WithColor sets the accent color to output to the terminal.
 func WithColor(color string) Option {
-	return func(c *CLIRenrerer) {
+	return func(c *CLIRenderer) {
 		c.theme = &theme{
 			Normal:             []byte(ansi.Reset),
 			Bold:               []byte(ansi.Reset + ansi.ColorCode("red+b") + ansi.DefaultFG),
@@ -26,7 +26,7 @@ func WithColor(color string) Option {
 // WithoutColor turns off all color.
 // Renderer draws with standard color only.
 func WithoutColor() Option {
-	return func(c *CLIRenrerer) {
+	return func(c *CLIRenderer) {
 		c.theme = &theme{
 			Normal:             []byte(ansi.Reset),
 			Bold:               []byte(ansi.Reset + ansi.ColorCode("red+b") + ansi.DefaultFG),
@@ -47,7 +47,7 @@ func WithoutColor() Option {
 //     1.2 headings
 //     ───────────
 func WithHeadingStyle(useNumber bool, underlineLevel int) Option {
-	return func(c *CLIRenrerer) {
+	return func(c *CLIRenderer) {
 		c.withHeadingNumber = true
 		c.headingUnderlineLevel = underlineLevel
 	}

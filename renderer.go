@@ -21,7 +21,7 @@ type theme struct {
 	HiBoldColor        []byte
 }
 
-type CLIRenrerer struct {
+type CLIRenderer struct {
 	hPos                  [6]int
 	context               bf.NodeType
 	listIndent            int
@@ -32,7 +32,7 @@ type CLIRenrerer struct {
 	headingUnderlineLevel int
 }
 
-func (c *CLIRenrerer) Init(options ...Option) {
+func (c *CLIRenderer) Init(options ...Option) {
 	for _, opt := range options {
 		opt(c)
 	}
@@ -42,7 +42,7 @@ func (c *CLIRenrerer) Init(options ...Option) {
 	}
 }
 
-func (c *CLIRenrerer) nextHPos(level int) string {
+func (c *CLIRenderer) nextHPos(level int) string {
 	var out []string
 	for i := 0; i < 6; i++ {
 		if i < level-1 {
@@ -57,7 +57,7 @@ func (c *CLIRenrerer) nextHPos(level int) string {
 	return strings.Join(out, ".")
 }
 
-func (c *CLIRenrerer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.WalkStatus {
+func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.WalkStatus {
 	switch node.Type {
 	case bf.Document:
 
@@ -296,6 +296,6 @@ func (c *CLIRenrerer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 	return bf.GoToNext
 }
 
-func (c *CLIRenrerer) RenderHeader(w io.Writer, ast *bf.Node) {}
+func (c *CLIRenderer) RenderHeader(w io.Writer, ast *bf.Node) {}
 
-func (c *CLIRenrerer) RenderFooter(w io.Writer, ast *bf.Node) {}
+func (c *CLIRenderer) RenderFooter(w io.Writer, ast *bf.Node) {}
