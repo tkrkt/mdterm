@@ -21,6 +21,7 @@ type theme struct {
 	HiBoldColor        []byte
 }
 
+// CLIRenderer is renderer for blackfriday.
 type CLIRenderer struct {
 	hPos                  [6]int
 	context               bf.NodeType
@@ -32,6 +33,7 @@ type CLIRenderer struct {
 	headingUnderlineLevel int
 }
 
+// Init initializes renderer.
 func (c *CLIRenderer) Init(options ...Option) {
 	for _, opt := range options {
 		opt(c)
@@ -57,6 +59,7 @@ func (c *CLIRenderer) nextHPos(level int) string {
 	return strings.Join(out, ".")
 }
 
+// RenderNode renders each node to writer
 func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.WalkStatus {
 	switch node.Type {
 	case bf.Document:
@@ -314,6 +317,8 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 	return bf.GoToNext
 }
 
+// RenderHeader adds text at the head
 func (c *CLIRenderer) RenderHeader(w io.Writer, ast *bf.Node) {}
 
+// RenderFooter adds text at the foot
 func (c *CLIRenderer) RenderFooter(w io.Writer, ast *bf.Node) {}
