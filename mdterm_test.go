@@ -15,8 +15,8 @@ func TestRun(t *testing.T) {
 		return
 	}
 	fmt.Println(string(mdterm.Run(input,
-		mdterm.WithColor("magenta"),
+		mdterm.WithColor("cyan"),
 		// mdterm.WithNoColor(),
-		// mdterm.WithHeadingStyle(true, 2),
+		mdterm.WithHeadingStyle(true, 2),
 	)))
 }

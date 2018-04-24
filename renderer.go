@@ -60,6 +60,7 @@ func (c *CLIRenrerer) nextHPos(level int) string {
 func (c *CLIRenrerer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.WalkStatus {
 	switch node.Type {
 	case bf.Document:
+
 	case bf.BlockQuote:
 		if entering {
 			c.context = bf.BlockQuote
@@ -237,6 +238,7 @@ func (c *CLIRenrerer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 		}
 
 	case bf.HTMLBlock:
+
 	case bf.CodeBlock:
 		if entering {
 			lines := strings.Split(strings.Trim(string(node.Literal), "\n"), "\n")
