@@ -47,7 +47,7 @@ func WithoutColor() Option {
 //     1.2.3 headings
 // If underlineLevel is not zero, h[n, n<=underlineLevel] is displayed like this:
 //     1.2 headings
-//     ───────────
+//     ──────────────────────
 func WithHeadingStyle(useNumber bool, underlineLevel int) Option {
 	return func(c *CLIRenderer) {
 		c.withHeadingNumber = true

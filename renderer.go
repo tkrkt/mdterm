@@ -218,9 +218,6 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 			switch c.context {
 			case bf.BlockQuote:
 				lines := strings.Split(string(node.Literal), "\n")
-				mark := append(c.theme.BoldColor, []byte("┃")...)
-				mark = append(mark, c.theme.Normal...)
-
 				markReg, _ := regexp.Compile(">\\s*")
 				lineReg, _ := regexp.Compile("^((>\\s*)*)([^>\\s].*)$")
 				for i, line := range lines {

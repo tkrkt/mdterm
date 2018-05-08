@@ -6,6 +6,11 @@ import (
 
 // Run is the main entry point to mdterm.
 // It parses and renders a block of markdown-encoded text.
+// See Option to change heading style or color.
+//     output := mdterm.Run(input,
+//       mdterm.WithColor("magenta"),
+//       mdterm.WithHeadingStyle(true, 2),
+//     )
 func Run(input []byte, options ...Option) []byte {
 	renderer := CLIRenderer{}
 	renderer.Init(options...)

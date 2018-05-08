@@ -1,4 +1,4 @@
-# mdterm
+# mdterm [![godoc](https://godoc.org/github.com/tkrkt/mdterm?status.svg)](https://godoc.org/github.com/tkrkt/mdterm) [![Go Report Card](https://goreportcard.com/badge/github.com/tkrkt/mdterm)](https://goreportcard.com/report/github.com/tkrkt/mdterm)
 
 Output markdown to terminal
 
