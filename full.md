@@ -11,7 +11,7 @@
 
 ## Inline
 
-**bold**, *italic*
+**bold**, *italic*, ~~strikethrough~~
 [link](http://example.com)
 ![image](https://example.com)
 

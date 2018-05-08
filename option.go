@@ -19,6 +19,7 @@ func WithColor(color string) Option {
 			UnderlineBoldColor: []byte(ansi.Reset + ansi.ColorCode(color+"+ub")),
 			HiColor:            []byte(ansi.Reset + ansi.ColorCode(color+"+h")),
 			HiBoldColor:        []byte(ansi.Reset + ansi.ColorCode(color+"+bh")),
+			Strikethrough:      []byte(ansi.Reset + ansi.ColorCode("black+hs")),
 		}
 	}
 }
@@ -36,6 +37,7 @@ func WithoutColor() Option {
 			UnderlineBoldColor: []byte(ansi.Reset + ansi.ColorCode("red+ub") + ansi.DefaultFG),
 			HiColor:            []byte(ansi.Reset),
 			HiBoldColor:        []byte(ansi.Reset + ansi.ColorCode("red+b") + ansi.DefaultFG),
+			Strikethrough:      []byte(ansi.Reset),
 		}
 	}
 }

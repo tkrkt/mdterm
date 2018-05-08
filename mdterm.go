@@ -13,6 +13,7 @@ func Run(input []byte, options ...Option) []byte {
 		bf.NoIntraEmphasis|
 			bf.Tables|
 			bf.FencedCode|
+			bf.Strikethrough|
 			bf.BackslashLineBreak,
 	))
 	return output

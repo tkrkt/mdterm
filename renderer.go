@@ -19,6 +19,7 @@ type theme struct {
 	UnderlineBoldColor []byte
 	HiColor            []byte
 	HiBoldColor        []byte
+	Strikethrough      []byte
 }
 
 // CLIRenderer is renderer for blackfriday.
@@ -160,6 +161,13 @@ func (c *CLIRenderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.W
 		}
 
 	case bf.Del:
+		if entering {
+			w.Write(c.theme.Strikethrough)
+			w.Write([]byte("~~"))
+		} else {
+			w.Write([]byte("~~"))
+			w.Write(c.theme.Normal)
+		}
 
 	case bf.Link:
 		if entering {

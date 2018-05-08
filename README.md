@@ -27,7 +27,7 @@ fmt.Println(string(output))
 * emphasis
     * [x] bold
     * [x] italic
-    * [ ] strikethrough
+    * [x] strikethrough
 * link
     * [x] link
     * [x] image
